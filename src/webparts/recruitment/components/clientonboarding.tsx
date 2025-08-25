@@ -108,7 +108,6 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
      `;
      document.head.appendChild(style);
    }, []);
- 
 
   return (
      <div
@@ -147,8 +146,8 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
           </ul>
         </nav>
 
-        {/* Main Content */}
-        <section className={styles.content}>
+{/* Main Content */}
+<section className={styles.content}>
 <div className={styles.clientHeader}>
   <h2>Client List</h2>
 </div>
@@ -206,7 +205,7 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
       </div>
 
    {/* Modal Form */}
-   
+
 {showForm && (
   <div className={styles.modalOverlay}>
     <div className={styles.modalContent}>
@@ -300,14 +299,14 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
             onClick={handleSubmit} 
             className={styles.saveBtn}
           >
-            💾 Save
+             Save
           </button>
           <button 
             type="button" 
             onClick={() => setShowForm(false)} 
             className={styles.cancelBtn}
           >
-            ✖ Cancel
+             Cancel
           </button>
         </div>
       </form>
