@@ -1,13 +1,6 @@
 import * as React from "react";
-import {
-  Stack,
-  Text,
-  SearchBox,
-  PrimaryButton,
-  DefaultButton,
-  DetailsList,
-  IColumn,
-} from "@fluentui/react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./dashboard.module.scss";
 
 interface IDashboardProps {
@@ -15,43 +8,21 @@ interface IDashboardProps {
 }
 
 const Dashboard: React.FC<IDashboardProps> = () => {
+  const navigate = useNavigate();
+
   // Dummy data
   const jobOpenings = [
-    { Title: "Software Engineer", Client: "ABC Corp", Recruiter: "John Doe" },
-    { Title: "HR Manager", Client: "XYZ Ltd", Recruiter: "Jane Smith" },
+    { id: 1, title: "Software Engineer", client: "ABC Corp", recruiter: "John Doe" },
+    { id: 2, title: "HR Manager", client: "XYZ Ltd", recruiter: "Jane Smith" },
   ];
 
   const approvals = [
-    { Candidate: "Alice", Job: "Software Engineer", Recruiter: "John Doe" },
-    { Candidate: "Bob", Job: "HR Manager", Recruiter: "Jane Smith" },
-  ];
-
-  // Columns
-  const jobColumns: IColumn[] = [
-    { key: "title", name: "Title", fieldName: "Title", minWidth: 150, isResizable: true },
-    { key: "client", name: "Client", fieldName: "Client", minWidth: 150, isResizable: true },
-    { key: "recruiter", name: "Recruiter", fieldName: "Recruiter", minWidth: 150, isResizable: true },
-  ];
-
-  const approvalColumns: IColumn[] = [
-    { key: "candidate", name: "Candidate", fieldName: "Candidate", minWidth: 150, isResizable: true },
-    { key: "job", name: "Job", fieldName: "Job", minWidth: 150, isResizable: true },
-    { key: "recruiter", name: "Recruiter", fieldName: "Recruiter", minWidth: 150, isResizable: true },
-    {
-      key: "actions",
-      name: "Actions",
-      minWidth: 200,
-      onRender: (item: any) => (
-        <Stack horizontal tokens={{ childrenGap: 10 }}>
-          <PrimaryButton text="Approve" />
-          <DefaultButton text="Reject" />
-        </Stack>
-      ),
-    },
+    { id: 1, candidate: "Alice", job: "Software Engineer", recruiter: "John Doe" },
+    { id: 2, candidate: "Bob", job: "HR Manager", recruiter: "Jane Smith" },
   ];
 
   // Hide SharePoint chrome
-  React.useEffect(() => {
+  useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `
       #SuiteNavWrapper,
@@ -108,74 +79,111 @@ const Dashboard: React.FC<IDashboardProps> = () => {
         zIndex: 9999,
       }}
     >
-      <div className={styles.wrapper}>
-        <Stack horizontal className={styles.layout}>
+      <div className={styles.dashboardWrapper}>
+        {/* Header */}
+        <header className={styles.header}>
+          <h1 className={styles.appName}>Recruitment Hub</h1>
+          <div className={styles.userInfo}>john doe</div>
+        </header>
+
+        <div className={styles.mainContainer}>
           {/* Sidebar */}
-          <Stack className={styles.sidebar} tokens={{ childrenGap: 20 }}>
-            <Text className={styles.title}>Recruitment Hub</Text>
+          <nav className={styles.sidebar}>
+            <ul>
+              <li><button className={styles.active}>Dashboard</button></li>
+              <li><button onClick={() => navigate("/clientonboarding")}>Clients</button></li>
+              <li><button onClick={() => navigate("/jobopenings")}>Job Openings</button></li>
+              <li><button onClick={() => navigate("/candidates")}>Candidates</button></li>
+              <li><button onClick={() => navigate("/approvals")}>Approvals</button></li>
+              <li><button onClick={() => navigate("/interviews")}>Interviews</button></li>
+              <li><button onClick={() => navigate("/reports")}>Reports</button></li>
+              <li><button onClick={() => navigate("/admin")}>Admin</button></li>
+            </ul>
+          </nav>
 
-            {/* Navigation Items */}
-            <Stack tokens={{ childrenGap: 12 }}>
-              <div className={styles.navItem}><span>Dashboard</span></div>
-              <div className={styles.navItem}> <span>Clients</span></div>
-              <div className={styles.navItem}> <span>Job Openings</span></div>
-              <div className={styles.navItem}> <span>Candidates</span></div>
-              <div className={styles.navItem}> <span>Approvals</span></div>
-              <div className={styles.navItem}> <span>Interviews</span></div>
-              <div className={styles.navItem}> <span>Reports</span></div>
-              <div className={styles.navItem}> <span>Admin</span></div>
+          {/* Content */}
+          <section className={styles.content}>
+            <div className={styles.clientHeader}>
+              <h2>Dashboard</h2>
+            </div>
 
-            </Stack>
-          </Stack>
-
-          {/* Main Content */}
-          <Stack grow className={styles.main} tokens={{ childrenGap: 25 }}>
-            {/* Header */}
-            <Stack horizontal horizontalAlign="space-between" verticalAlign="center">
-              <Text variant="xxLarge" styles={{ root: { fontWeight: 600 } }}>
-                Dashboard
-              </Text>
-              <SearchBox placeholder="Search..." />
-            </Stack>
-
-            {/* Stats Cards */}
-            <Stack horizontal wrap tokens={{ childrenGap: 20 }}>
+            {/* Stats */}
+            <div className={styles.statsGrid}>
               <div className={styles.card}>
-                <Text variant="xxLarge">24</Text>
-                <Text>Active Clients</Text>
+                <h3>24</h3>
+                <p>Active Clients</p>
               </div>
               <div className={styles.card}>
-                <Text variant="xxLarge">18</Text>
-                <Text>Job Openings</Text>
+                <h3>18</h3>
+                <p>Job Openings</p>
               </div>
               <div className={styles.card}>
-                <Text variant="xxLarge">142</Text>
-                <Text>Total Candidates</Text>
+                <h3>142</h3>
+                <p>Total Candidates</p>
               </div>
               <div className={styles.card}>
-                <Text variant="xxLarge">9</Text>
-                <Text>Approvals Pending</Text>
+                <h3>9</h3>
+                <p>Approvals Pending</p>
               </div>
-            </Stack>
+            </div>
 
-            {/* Tables Section */}
-            <Stack horizontal wrap tokens={{ childrenGap: 30 }}>
-              <Stack grow>
-                <Text variant="large" styles={{ root: { fontWeight: 600 } }}>
-                  Recent Job Openings
-                </Text>
-                <DetailsList items={jobOpenings} columns={jobColumns} />
-              </Stack>
+            {/* Job Openings Table */}
+            <div className={styles.tableContainer}>
+              <h3>Recent Job Openings</h3>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Client</th>
+                    <th>Recruiter</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobOpenings.map((job) => (
+                    <tr key={job.id}>
+                      <td>{job.title}</td>
+                      <td>{job.client}</td>
+                      <td>{job.recruiter}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-              <Stack grow>
-                <Text variant="large" styles={{ root: { fontWeight: 600 } }}>
-                  Pending Approvals
-                </Text>
-                <DetailsList items={approvals} columns={approvalColumns} />
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack>
+            {/* Approvals Table */}
+            <div className={styles.tableContainer}>
+              <h3>Pending Approvals</h3>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Candidate</th>
+                    <th>Job</th>
+                    <th>Recruiter</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {approvals.map((a) => (
+                    <tr key={a.id}>
+                      <td>{a.candidate}</td>
+                      <td>{a.job}</td>
+                      <td>{a.recruiter}</td>
+                      <td>
+                        <button className={styles.actionButton}>Approve</button>
+                        <button className={styles.cancelBtn}>Reject</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        {/* Footer */}
+        <footer className={styles.footer}>
+          © 2025 Recruitment Hub. All rights reserved.
+        </footer>
       </div>
     </div>
   );

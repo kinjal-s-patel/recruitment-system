@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Dashboard from './dashboard';
-// import ClientForm from './clientform';
+import ClientOnboarding from './clientonboarding';
 // import TotalClients from './totalclient';
 // import ProspectFormPage from './prospectform';
 // import TotalProspects from './totalprospects';
@@ -24,6 +24,7 @@ const AppRouter: React.FC<IAppRouterProps> = (props) => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard {...restProps} context={context} />} />
+        <Route path="clientonboarding" element={<ClientOnboarding {...restProps} context={context} />} />
 
 
     </Routes>
