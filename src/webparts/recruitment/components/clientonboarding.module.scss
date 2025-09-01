@@ -231,6 +231,11 @@
   flex-direction: column;
   gap: 15px;
 }
+.readOnlyInput {
+  background-color: #f1f1f1;
+  color: #666;
+  cursor: not-allowed;
+}
 
 .formGroup {
   display: flex;

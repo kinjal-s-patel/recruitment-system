@@ -18,6 +18,7 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
   const [userName, setUserName] = useState<string>("");
 
   const [formData, setFormData] = useState<any>({
+    clientId: "",
     clientName: "",
     contactPerson: "",
     email: "",
@@ -35,10 +36,37 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
     }
   }, [context]);
 
+  // Utility: generate padded numbers
+  const pad = (num: number, size: number) => {
+    let s = num.toString();
+    while (s.length < size) s = "0" + s;
+    return s;
+  };
+
+  // Open form & auto-generate clientId
+  const handleAddClient = () => {
+    const nextId = clients.length + 1;
+    const clientId = `CLI-${pad(nextId, 3)}`;
+
+    setFormData({
+      clientId,
+      clientName: "",
+      contactPerson: "",
+      email: "",
+      phone: "",
+      linkedin: "",
+      address: "",
+      onboardDate: new Date().toLocaleDateString(),
+      status: "Active",
+    });
+
+    setShowForm(true);
+  };
+
   // Handle form input
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   // Save new client
@@ -48,10 +76,10 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
       return;
     }
 
-    const newClient = { ...formData, id: clients.length + 1 };
-    setClients([...clients, newClient]);
+    setClients([...clients, formData]);
 
     setFormData({
+      clientId: "",
       clientName: "",
       contactPerson: "",
       email: "",
@@ -66,6 +94,8 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
     setShowSuccessMessage(true);
     setTimeout(() => setShowSuccessMessage(false), 3000);
   };
+
+
 
   // Filter clients
   const filteredClients = clients.filter(
@@ -171,7 +201,7 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
               />
               <button
                 className={styles.actionButton}
-                onClick={() => setShowForm(true)}
+                onClick={handleAddClient}
               >
                 + Add Client
               </button>
@@ -194,8 +224,8 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
                 </thead>
                 <tbody>
                   {filteredClients.map((c) => (
-                    <tr key={c.id}>
-                      <td>{c.id}</td>
+                    <tr key={c.clientId}>
+                      <td>{c.clientId}</td>
                       <td>{c.clientName}</td>
                       <td>{c.email}</td>
                       <td>{c.phone}</td>
@@ -222,6 +252,15 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
 
               {/* Modal Form */}
               <form className={styles.modalForm}>
+                <div className={styles.formGroup}>
+                  <label>Client ID</label>
+                  <input
+                    name="clientId"
+                    value={formData.clientId}
+                    readOnly
+                    className={styles.readOnlyInput}
+                  />
+                </div>
                 <div className={styles.formGroup}>
                   <label>Client Name <span className={styles.required}>*</span></label>
                   <input

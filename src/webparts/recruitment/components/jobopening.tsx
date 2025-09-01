@@ -16,6 +16,7 @@ const JobOpenings: React.FC<IJobOpeningsProps> = ({ context }) => {
   const [showForm, setShowForm] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [userName, setUserName] = useState<string>("");
+  const [nextId, setNextId] = useState(1);
 
   const [formData, setFormData] = useState<any>({
     jobTitle: "",
@@ -27,6 +28,13 @@ const JobOpenings: React.FC<IJobOpeningsProps> = ({ context }) => {
     status: "Open",
   });
 
+  // Helper: Safe pad function (avoids padStart issues in SPFx)
+  const pad = (num: number, size: number) => {
+    let s = String(num);
+    while (s.length < size) s = "0" + s;
+    return s;
+  };
+
   // Get current logged-in username from SharePoint context
   useEffect(() => {
     if (context?.pageContext?.user?.displayName) {
@@ -35,7 +43,9 @@ const JobOpenings: React.FC<IJobOpeningsProps> = ({ context }) => {
   }, [context]);
 
   // Handle form input
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -47,9 +57,13 @@ const JobOpenings: React.FC<IJobOpeningsProps> = ({ context }) => {
       return;
     }
 
-    const newJob = { ...formData, id: jobs.length + 1 };
-    setJobs([...jobs, newJob]);
+    const jobId = `JOB-${pad(nextId, 3)}`;
+    const newJob = { ...formData, id: jobId };
 
+    setJobs([...jobs, newJob]);
+    setNextId(nextId + 1); // Increment for next job
+
+    // Reset form
     setFormData({
       jobTitle: "",
       clientName: "",
@@ -221,7 +235,18 @@ const JobOpenings: React.FC<IJobOpeningsProps> = ({ context }) => {
               {/* Modal Form */}
               <form className={styles.modalForm}>
                 <div className={styles.formGroup}>
-                  <label>Job Title <span className={styles.required}>*</span></label>
+                  <label>Job ID</label>
+                  <input
+                    type="text"
+                    value={`JOB-${pad(nextId, 3)}`}
+                    readOnly
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>
+                    Job Title <span className={styles.required}>*</span>
+                  </label>
                   <input
                     name="jobTitle"
                     placeholder="Enter job title"
@@ -232,7 +257,9 @@ const JobOpenings: React.FC<IJobOpeningsProps> = ({ context }) => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label>Client Name <span className={styles.required}>*</span></label>
+                  <label>
+                    Client Name <span className={styles.required}>*</span>
+                  </label>
                   <input
                     name="clientName"
                     placeholder="Enter client name"
