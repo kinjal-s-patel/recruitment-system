@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./dashboard.module.scss";
 
@@ -7,8 +7,9 @@ interface IDashboardProps {
   context: any;
 }
 
-const Dashboard: React.FC<IDashboardProps> = () => {
+const Dashboard: React.FC<IDashboardProps> = ({ context }) => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState<string>("");
 
   // Dummy data
   const jobOpenings = [
@@ -20,6 +21,13 @@ const Dashboard: React.FC<IDashboardProps> = () => {
     { id: 1, candidate: "Alice", job: "Software Engineer", recruiter: "John Doe" },
     { id: 2, candidate: "Bob", job: "HR Manager", recruiter: "Jane Smith" },
   ];
+
+  // Fetch current user info
+  useEffect(() => {
+    if (context?.pageContext?.user?.displayName) {
+      setUserName(context.pageContext.user.displayName);
+    }
+  }, [context]);
 
   // Hide SharePoint chrome
   useEffect(() => {
@@ -83,7 +91,7 @@ const Dashboard: React.FC<IDashboardProps> = () => {
         {/* Header */}
         <header className={styles.header}>
           <h1 className={styles.appName}>Recruitment Hub</h1>
-          <div className={styles.userInfo}>john doe</div>
+          <div className={styles.userInfo}>{userName || "Loading..."}</div>
         </header>
 
         <div className={styles.mainContainer}>
