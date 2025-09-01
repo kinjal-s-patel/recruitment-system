@@ -100,7 +100,7 @@ const Dashboard: React.FC<IDashboardProps> = ({ context }) => {
             <ul>
               <li><button className={styles.active}>Dashboard</button></li>
               <li><button onClick={() => navigate("/clientonboarding")}>Clients</button></li>
-              <li><button onClick={() => navigate("/jobopenings")}>Job Openings</button></li>
+              <li><button onClick={() => navigate("/jobopening")}>Job Openings</button></li>
               <li><button onClick={() => navigate("/candidates")}>Candidates</button></li>
               <li><button onClick={() => navigate("/approvals")}>Approvals</button></li>
               <li><button onClick={() => navigate("/interviews")}>Interviews</button></li>

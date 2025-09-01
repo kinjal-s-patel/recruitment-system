@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Dashboard from './dashboard';
 import ClientOnboarding from './clientonboarding';
-// import TotalClients from './totalclient';
+import JobOpenings from './jobopening';
 // import ProspectFormPage from './prospectform';
 // import TotalProspects from './totalprospects';
 // import GenerateAgreementForm from './agreementform';
@@ -25,6 +25,7 @@ const AppRouter: React.FC<IAppRouterProps> = (props) => {
     <Routes>
       <Route path="/" element={<Dashboard {...restProps} context={context} />} />
         <Route path="clientonboarding" element={<ClientOnboarding {...restProps} context={context} />} />
+        <Route path="jobopening" element={<JobOpenings {...restProps} context={context} />} />
 
 
     </Routes>
