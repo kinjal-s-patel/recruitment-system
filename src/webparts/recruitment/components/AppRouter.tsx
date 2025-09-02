@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Dashboard from './dashboard';
 import ClientOnboarding from './clientonboarding';
 import JobOpenings from './jobopening';
-// import ProspectFormPage from './prospectform';
+import RoleAssignment from './roleassignment';
 // import TotalProspects from './totalprospects';
 // import GenerateAgreementForm from './agreementform';
 
@@ -26,6 +26,8 @@ const AppRouter: React.FC<IAppRouterProps> = (props) => {
       <Route path="/" element={<Dashboard {...restProps} context={context} />} />
         <Route path="clientonboarding" element={<ClientOnboarding {...restProps} context={context} />} />
         <Route path="jobopening" element={<JobOpenings {...restProps} context={context} />} />
+        <Route path="roleassignment" element={<RoleAssignment {...restProps} context={context} />} />
+
 
 
     </Routes>
