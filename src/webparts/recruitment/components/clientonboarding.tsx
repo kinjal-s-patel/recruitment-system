@@ -232,10 +232,11 @@ const ClientOnboarding: React.FC<IClientOnboardingProps> = ({ context }) => {
         <nav className={styles.sidebar}>
           <ul>
             <li><button onClick={() => navigate("/")}>Dashboard</button></li>
+               <li><button onClick={() => navigate("/roleassignment")}>Role Assignment</button></li>
             <li><button className={styles.active}>Clients</button></li>
             <li><button onClick={() => navigate("/jobopening")}>Job Openings</button></li>
             <li><button onClick={() => navigate("/candidates")}>Candidates</button></li>
-            <li><button onClick={() => navigate("/approvals")}>Approvals</button></li>
+         
             <li><button onClick={() => navigate("/interviews")}>Interviews</button></li>
             <li><button onClick={() => navigate("/reports")}>Reports</button></li>
             <li><button onClick={() => navigate("/admin")}>Admin</button></li>
