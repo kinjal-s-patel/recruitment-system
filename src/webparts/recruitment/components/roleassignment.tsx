@@ -15,7 +15,7 @@ interface IRoleAssignmentProps {
 const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
   const navigate = useNavigate();
   const sp: SPFI = spfi().using(SPFx(context));
-  
+
   const [roles, setRoles] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -192,7 +192,7 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
                 <button className={styles.active}>Role Assignment</button>
               </li>
               <li>
-                <button onClick={() => navigate("/clients")}>Clients</button>
+                <button onClick={() => navigate("/clientonboarding")}>Clients</button>
               </li>
               <li>
                 <button onClick={() => navigate("/jobopening")}>Job Openings</button>
