@@ -15,7 +15,7 @@ interface IRoleAssignmentProps {
 const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
   const navigate = useNavigate();
   const sp: SPFI = spfi().using(SPFx(context));
-
+  
   const [roles, setRoles] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -26,8 +26,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
   const todayStr = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
   const [formData, setFormData] = useState<any>({
-    roleName: "",
-    assignedTo: "",
+    employeeName: "",
+    role: "Recruiter",
+    email: "",
     description: "",
     status: "Active",
     assignedDate: todayStr,
@@ -48,8 +49,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
           .getByTitle("roles")
           .items.select(
             "ID",
-            "roleName",
-            "assignedTo",
+            "employeeName",
+            "role",
+            "email",
             "description",
             "status",
             "assignedDate"
@@ -74,8 +76,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
   // Open form for Add or Edit
   const handleAddRole = () => {
     setFormData({
-      roleName: "",
-      assignedTo: "",
+      employeeName: "",
+      role: "Recruiter",
+      email: "",
       description: "",
       status: "Active",
       assignedDate: todayStr,
@@ -86,8 +89,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
 
   const handleEditRole = (role: any) => {
     setFormData({
-      roleName: role.roleName,
-      assignedTo: role.assignedTo,
+      employeeName: role.employeeName,
+      role: role.role,
+      email: role.email,
       description: role.description,
       status: role.status,
       assignedDate: role.assignedDate,
@@ -98,8 +102,8 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
 
   // Submit form to SharePoint
   const handleSubmit = async () => {
-    if (!formData.roleName.trim() || !formData.assignedTo.trim()) {
-      alert("Role Name and Assigned To are required!");
+    if (!formData.employeeName.trim() || !formData.role.trim()) {
+      alert("Employee Name and Role are required!");
       return;
     }
 
@@ -107,8 +111,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
       if (editingRoleId) {
         // Update existing role
         await sp.web.lists.getByTitle("roles").items.getById(editingRoleId).update({
-          roleName: formData.roleName,
-          assignedTo: formData.assignedTo,
+          employeeName: formData.employeeName,
+          role: formData.role,
+          email: formData.email,
           description: formData.description,
           status: formData.status,
           assignedDate: formData.assignedDate,
@@ -120,8 +125,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
       } else {
         // Add new role
         const addResult = await sp.web.lists.getByTitle("roles").items.add({
-          roleName: formData.roleName,
-          assignedTo: formData.assignedTo,
+          employeeName: formData.employeeName,
+          role: formData.role,
+          email: formData.email,
           description: formData.description,
           status: formData.status,
           assignedDate: formData.assignedDate,
@@ -131,8 +137,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
       }
 
       setFormData({
-        roleName: "",
-        assignedTo: "",
+        employeeName: "",
+        role: "Recruiter",
+        email: "",
         description: "",
         status: "Active",
         assignedDate: todayStr,
@@ -149,8 +156,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
 
   const filteredRoles = roles.filter(
     (r) =>
-      r.roleName?.toLowerCase().includes(search.toLowerCase()) ||
-      r.assignedTo?.toLowerCase().includes(search.toLowerCase())
+      r.employeeName?.toLowerCase().includes(search.toLowerCase()) ||
+      r.role?.toLowerCase().includes(search.toLowerCase()) ||
+      r.email?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -212,7 +220,7 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
             <div className={styles.searchRow}>
               <input
                 type="text"
-                placeholder="Search by role or assigned to..."
+                placeholder="Search by employee, role, or email..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className={styles.searchInput}
@@ -227,9 +235,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Role Name</th>
-                    <th>Assigned To</th>
-                    <th>Description</th>
+                    <th>Employee Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
                     <th>Assigned Date</th>
                     <th>Status</th>
                     <th>Edit</th>
@@ -239,9 +247,9 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
                   {filteredRoles.map((r) => (
                     <tr key={r.ID}>
                       <td>{r.ID}</td>
-                      <td>{r.roleName}</td>
-                      <td>{r.assignedTo}</td>
-                      <td>{r.description}</td>
+                      <td>{r.employeeName}</td>
+                      <td>{r.role}</td>
+                      <td>{r.email}</td>     
                       <td>{r.assignedDate}</td>
                       <td>{r.status}</td>
                       <td>
@@ -268,29 +276,36 @@ const RoleAssignment: React.FC<IRoleAssignmentProps> = ({ context }) => {
               </div>
               <div className={styles.modalForm}>
                 <div className={styles.formGroup}>
-                  <label>Role Name *</label>
+                  <label>Employee Name *</label>
                   <input
-                    name="roleName"
-                    value={formData.roleName}
+                    name="employeeName"
+                    value={formData.employeeName}
                     onChange={handleChange}
                   />
                 </div>
+
                 <div className={styles.formGroup}>
-                  <label>Assigned To *</label>
+                  <label>Role *</label>
+                  <select
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                  >
+                    <option value="Admin">Admin</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Recruiter">Recruiter</option>
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Email *</label>
                   <input
-                    name="assignedTo"
-                    value={formData.assignedTo}
+                    name="email"
+                    value={formData.email}
                     onChange={handleChange}
                   />
                 </div>
-                <div className={styles.formGroup}>
-                  <label>Description</label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                  />
-                </div>
+
                 <div className={styles.formGroup}>
                   <label>Status</label>
                   <select name="status" value={formData.status} onChange={handleChange}>
